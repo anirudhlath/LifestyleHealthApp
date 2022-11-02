@@ -8,20 +8,20 @@ import androidx.lifecycle.LiveData;
 public class NavigationViewModel extends AndroidViewModel {
 
     private LiveData<User> userMutableLiveData;
-    private UserRepository profilePageRepository;
+    private UserRoomDatabase profilePageDb;
 
     public NavigationViewModel(Application application) {
 
         super(application);
-        profilePageRepository = UserRepository.getInstance();
-        profilePageRepository.createDb(application.getApplicationContext());
-        userMutableLiveData = profilePageRepository.getUserData();
+        profilePageDb = UserRoomDatabase.getInstance(application.getApplicationContext());
+        profilePageDb.create(application.getApplicationContext());
+        userMutableLiveData = profilePageDb.userDao().getUser();
 
     }
 
     // RETRIEVE DATA FROM THE REPOSITORY
     private LiveData<User> getProfileViewModelData() {
-        return profilePageRepository.getUserData();
+        return profilePageDb.userDao().getUser();
     }
 
     public String getCity() {

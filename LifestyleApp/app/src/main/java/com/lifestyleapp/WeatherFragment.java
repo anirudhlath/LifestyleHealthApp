@@ -91,7 +91,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener
         mWeatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
 
         //Set the observer
-        mWeatherViewModel.getData().observe(this, weatherObserver);
+        mWeatherViewModel.getData().observe(getViewLifecycleOwner(), weatherObserver);
 
         return view;
     }
@@ -132,7 +132,7 @@ public class WeatherFragment extends Fragment implements View.OnClickListener
         super.onStart();
 
         weatherUserViewModel = ViewModelProviders.of(this).get(WeatherUserViewModel.class);
-        user = weatherUserViewModel.getProfileViewModelData().getValue();
+        user = UserViewModel.getProfileViewModelData(getContext()).getValue();
 
         if(user != null && !user.getCity().isEmpty() && !user.getCountry().isEmpty())
         {

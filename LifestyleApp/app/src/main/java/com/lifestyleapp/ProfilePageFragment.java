@@ -127,7 +127,7 @@ public class ProfilePageFragment extends Fragment implements View.OnClickListene
 
         // GET USER FROM VIEWMODEL (IF THERE IS ONE), THEN SET THE TEXT FIELDS ON THE UI
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        User user = userViewModel.getProfileViewModelData().getValue();
+        User user = userViewModel.getProfileViewModelData(getContext()).getValue();
         @Nullable String fileToPlaceAsProfile = null;
         if(photoTaken) {
             fileToPlaceAsProfile = profilePhotoFileName;
@@ -206,7 +206,7 @@ public class ProfilePageFragment extends Fragment implements View.OnClickListene
                 } else {
 
                     intAge = Integer.parseInt(stringAge);
-                    userViewModel.setProfileViewModelData(stringName, intAge, stringCity, stringCountry, doubleHeight, doubleWeight, intGender, profilePhotoFileName, byteArrSize, 0,0.0, 0.0, false);
+                    userViewModel.setProfileViewModelData(getContext(), stringName, intAge, stringCity, stringCountry, doubleHeight, doubleWeight, intGender, profilePhotoFileName, byteArrSize, 0,0.0, 0.0, false);
                     Toast.makeText(getActivity(), "User information saved!", Toast.LENGTH_SHORT).show();
 
                 }

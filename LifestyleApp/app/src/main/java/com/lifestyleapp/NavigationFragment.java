@@ -75,7 +75,6 @@ public class NavigationFragment extends Fragment implements View.OnClickListener
     private GestureLibrary objGestureLib;
 
 
-    private UserRepository userRepository;
 
     MediaPlayer startSound;
     MediaPlayer stopSound;
@@ -277,7 +276,7 @@ public class NavigationFragment extends Fragment implements View.OnClickListener
         stepCounterTextView.setOnLongClickListener(this);
 
         userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        user = userViewModel.getProfileViewModelData().getValue();
+        user = UserViewModel.getProfileViewModelData(getContext()).getValue();
 
         if (user != null) {
 

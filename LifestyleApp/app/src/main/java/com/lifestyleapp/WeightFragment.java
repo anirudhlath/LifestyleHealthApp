@@ -80,7 +80,7 @@ public class WeightFragment extends Fragment implements View.OnClickListener {
         radioButtonSedentary.setOnClickListener(this);
 
         weightViewModel = ViewModelProviders.of(this).get(WeightViewModel.class);
-        user = weightViewModel.getProfileViewModelData().getValue();
+        user = UserViewModel.getProfileViewModelData(getContext()).getValue();
 
         // calculate BMR
         if(user != null)
