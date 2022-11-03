@@ -1,21 +1,18 @@
 package com.lifestyleapp;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
-import android.content.res.Configuration;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 
 public class MasterDetail extends AppCompatActivity implements NavigationFragment.OnNavSelectedListener, ProfilePageFragment.OnLifePressListener, WeightFragment.OnLifePressFromWeightListener {
 
@@ -37,7 +34,7 @@ public class MasterDetail extends AppCompatActivity implements NavigationFragmen
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
 
-        this.uploadFile();
+        this.uploadDatabase();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_detail);
@@ -143,23 +140,29 @@ public class MasterDetail extends AppCompatActivity implements NavigationFragmen
 //        }
     }
 
-    private void uploadFile() {
-        File exampleFile = new File(getApplicationContext().getFilesDir(), "ExampleKey");
-
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(exampleFile));
-            writer.append("Example file contents");
-            writer.close();
-        } catch (Exception exception) {
-            Log.e("MyAmplifyApp", "Upload failed", exception);
-        }
+    private void uploadDatabase() {
+        String databasePath = getApplicationContext().getDatabasePath("user.db").getPath();
+        File databaseFile = new File(databasePath);
 
         Amplify.Storage.uploadFile(
-                "ExampleKey",
-                exampleFile,
+                "user.db",
+                databaseFile,
                 result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey()),
                 storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
         );
     }
 
+    private void downloadDatabase() {
+        String databasePath = getApplicationContext().getDatabasePath("user.db").getPath();
+        File databaseFile = new File(databasePath);
+
+        Amplify.Storage.downloadFile(
+                "user.db",
+                databaseFile,
+                result -> Log.i("MyAmplifyApp", "Successfully downloaded: user.db"),
+                storageFailure -> Log.e("MyAmplifyApp", "Download failed", storageFailure)
+        );
+
+
     }
+}
