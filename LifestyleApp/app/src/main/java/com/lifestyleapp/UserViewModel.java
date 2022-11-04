@@ -52,6 +52,22 @@ public class UserViewModel extends AndroidViewModel {
 
     }
 
+    public void setSteps(int i){
+        User user=userLiveData.getValue();
+        profilePageRepository.setUserData(user.getFullName(), user.getAge(), user.getCity(), user.getCountry(), user.getHeight(), user.getWeight(), user.getGender(), user.getProfilePhotoPath(), user.getProfilePhotoSize(), i, user.getSedentary(), user.getPounds());
+
+
+    }
+
+    public int getSteps() {
+
+        if (getProfileViewModelData().getValue() != null) {
+            return getProfileViewModelData().getValue().getSteps();
+        }
+
+        return 0;
+    }
+
 
     public String getCity() {
 
