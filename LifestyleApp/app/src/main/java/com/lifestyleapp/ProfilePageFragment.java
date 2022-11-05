@@ -225,7 +225,13 @@ public class ProfilePageFragment extends Fragment implements View.OnClickListene
                 } else {
 
                     intAge = Integer.parseInt(stringAge);
-                    userViewModel.setProfileViewModelData(stringName, intAge, stringCity, stringCountry, doubleHeight, doubleWeight, intGender, profilePhotoFileName, byteArrSize, null,0.0, 0.0, false,0);
+
+                    if(NavigationFragment.previousTotalSteps > 0) {
+                        userViewModel.setProfileViewModelData(stringName, intAge, stringCity, stringCountry, doubleHeight, doubleWeight, intGender, profilePhotoFileName, byteArrSize, (int) NavigationFragment.previousTotalSteps,0.0, 0.0, false,0);
+
+                    }
+
+                    userViewModel.setProfileViewModelData(stringName, intAge, stringCity, stringCountry, doubleHeight, doubleWeight, intGender, profilePhotoFileName, byteArrSize, 0,0.0, 0.0, false,0);
                     Toast.makeText(getActivity(), "User information saved!", Toast.LENGTH_SHORT).show();
 
                 }

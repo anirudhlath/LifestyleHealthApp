@@ -75,7 +75,7 @@ public class NavigationFragment extends Fragment implements View.OnClickListener
     private boolean startGesturePerformed = false;
     private boolean isStepSensorAvailable = false;
     private float totalSteps = 0f;
-    private float previousTotalSteps = 0f;
+    public static float previousTotalSteps = 0f;
 
     private GestureLibrary objGestureLib;
 
@@ -151,7 +151,13 @@ public class NavigationFragment extends Fragment implements View.OnClickListener
             Log.d("Step Counter", "Previous Total Steps: " + String.valueOf(previousTotalSteps));
             stepCounterTextView.setText(String.valueOf(currentSteps));
             try {
-                userViewModel.setSteps(currentSteps);
+                if (currentSteps != 0) {
+                    userViewModel.setSteps(currentSteps);
+                }
+                else {
+                    userViewModel.setSteps((int) totalSteps);
+                    stepCounterTextView.setText(String.valueOf((int) totalSteps));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -178,8 +184,8 @@ public class NavigationFragment extends Fragment implements View.OnClickListener
 //        previousTotalSteps = savedNumber;
 
         try {
-            previousTotalSteps = userViewModel.getSteps();
-            stepCounterTextView.setText(String.valueOf((int) previousTotalSteps));
+            totalSteps = userViewModel.getSteps();
+            stepCounterTextView.setText(String.valueOf((int) totalSteps));
 
         }
         catch (Exception e) {
@@ -258,6 +264,7 @@ public class NavigationFragment extends Fragment implements View.OnClickListener
                 previousTotalSteps = 0f;
 //                saveData();
                 stepCounterTextView.setText("0");
+                userViewModel.setSteps(0);
                 Toast.makeText(getContext(), "Steps have been reset successfully.", Toast.LENGTH_SHORT).show();
             }
         }
@@ -279,7 +286,6 @@ public class NavigationFragment extends Fragment implements View.OnClickListener
         // GET USER FROM VIEWMODEL (IF THERE IS ONE), THEN SET THE TEXT FIELDS ON THE UI
         navigationViewModel = ViewModelProviders.of(this).get(NavigationViewModel.class);
 
-        loadData();
 
         sensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
         if(ContextCompat.checkSelfPermission(getContext(),
@@ -318,6 +324,8 @@ public class NavigationFragment extends Fragment implements View.OnClickListener
         stepCounterTextView.setOnClickListener(this);
         stepCounterTextView.setOnLongClickListener(this);
 
+
+
         userViewModel = new ViewModelProvider(this.getActivity()).get(UserViewModel.class);
 
         userViewModel.getProfileViewModelData().observe(getViewLifecycleOwner(), new Observer<User>() {
@@ -348,6 +356,9 @@ public class NavigationFragment extends Fragment implements View.OnClickListener
                 }
             }
         });
+        loadData();
+
+        stepCounterTextView.setText(String.valueOf(userViewModel.getSteps()));
 
         return navFragmentView;
     }
